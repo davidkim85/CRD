@@ -1,0 +1,205 @@
+{% set active_page = 'report' %}
+{% extends 'base.html' %}
+{% block title %}Add Report{% endblock %}
+
+{% block content %}
+    <!-- Bootstrap CSS (if not already included in base.html) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Responsive map height */
+        #map {
+            height: 300px;
+            width: 100%;
+        }
+        @media(min-width: 768px) {
+            #map {
+                height: 500px;
+            }
+        }
+        @media(min-width: 1200px) {
+            #map {
+                height: 600px;
+            }
+        }
+        /* Force Select2 full width */
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 38px;
+            padding: 6px 12px;
+        }
+        /* Select2 icons */
+        .select2-container--default .select2-results__option img,
+        .select2-container--default .select2-selection__rendered img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3">
+                    <p class="text-dark m-0 fw-bold">Add Report</p>
+                </div>
+                <div class="card-body">
+                    <form id="reportForm" method="POST" action="/report" enctype="multipart/form-data" novalidate>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mt-1">
+                                <label for="title" class="form-label"><i class="bi bi-pin-map me-2" title="Icon"></i><strong>Title</strong></label>
+                                <select class="form-select" name="title" id="title" required aria-label="Select report title">
+                                    <option></option>
+                                    <option value="Civilian" data-icon="/app/uploads/markers/civil.ico">Found Civilian</option>
+                                    <option value="Suspect" data-icon="/app/uploads/markers/suspect.ico">Found Suspect</option>
+                                    <option value="Lebanon Forces" data-icon="/app/uploads/markers/leb_solder.ico">Found Lebanon Forces</option>
+                                    <option value="UN Forces" data-icon="/app/uploads/markers/un_solder.ico">Found UN Forces</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 mt-1">
+                                <label for="file" class="form-label"><i class="bi bi-image me-2" title="Image"></i><strong>Image</strong></label>
+<input type="file" name="files" id="file" class="form-control" multiple required aria-label="Upload image files">
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <p class="text-danger text-center m-0 fw-bold" id="mapHint">📍 Click on the map to select a location.</p>
+                            <div class="col-12">
+                                <input type="hidden" id="lat" name="latitude" required/>
+                                <input type="hidden" id="lng" name="longitude" required/>
+                                <div id="map"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 justify-content-center">
+                            <div class="col-12 col-md-3">
+                                <button class="btn btn-dark btn-sm w-100 w-md-auto" type="submit"><i class="bi bi-save2 me-1"></i>Save Report</button>
+                            </div>
+                        </div>
+                    </form>
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div>
+    </div>
+</div>
+
+<!-- Validation Error Modal -->
+<div class="modal fade" id="validationModal" tabindex="-1" aria-labelledby="validationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-danger text-white" id="validationModalLabel">Validation Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="validationModalBody">
+        <!-- Message injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet and jQuery/Select2 scripts -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-..." crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        function formatOption(option) {
+            if (!option.id) return option.text;
+            const iconUrl = $(option.element).data('icon');
+            if (!iconUrl) return option.text;
+            return $(`<span><img src="${iconUrl}" /> ${option.text}</span>`);
+        }
+        $('#title').select2({
+            templateResult: formatOption,
+            templateSelection: formatOption,
+            minimumResultsForSearch: -1,
+            placeholder: "Select a report title",
+            allowClear: true
+        });
+    });
+
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+    const openTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '&copy; OpenTopoMap contributors'
+    });
+    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
+                                'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye',
+        maxZoom: 17
+    });
+    const map = L.map('map', {
+        center: [33.049616, 35.370456],
+        zoom: 13,
+        layers: [osm]
+    });
+    const baseMaps = {
+        "OpenStreetMap": osm,
+        "OpenTopoMap": openTopo,
+        "Satellite": esriSat
+    };
+    L.control.layers(baseMaps).addTo(map);
+
+    const locations = {{ locations | tojson | safe }};
+    locations.forEach(loc => {
+        const customIcon = L.icon({
+            iconUrl: loc.icon,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+        const popupContent = `<div style="text-align:center;"><small>${loc.title}</small></div>`;
+        L.marker([loc.latitude, loc.longitude], { icon: customIcon })
+            .addTo(map)
+            .bindPopup(popupContent);
+    });
+
+    let marker;
+    map.on('click', function (e) {
+        const lat = e.latlng.lat.toFixed(6);
+        const lng = e.latlng.lng.toFixed(6);
+        document.getElementById("lat").value = lat;
+        document.getElementById("lng").value = lng;
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([lat, lng]).addTo(map);
+        map.setView([lat, lng], 15);
+    });
+
+    document.getElementById("reportForm").addEventListener("submit", function(e) {
+        const lat = document.getElementById("lat").value;
+        const lng = document.getElementById("lng").value;
+        const files = document.getElementById("file").files;
+
+        function showModal(message) {
+            const modalBody = document.getElementById("validationModalBody");
+            modalBody.textContent = message;
+            const validationModal = new bootstrap.Modal(document.getElementById('validationModal'));
+            validationModal.show();
+        }
+
+        if (!lat || !lng) {
+            e.preventDefault();
+            showModal("Please select a location on the map.");
+            return;
+        }
+        if (!files.length) {
+            e.preventDefault();
+            showModal("Please upload at least one image file.");
+            return;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,316 @@
+{% set active_page = 'map' %}
+{% extends 'base.html' %}
+{% block title %}Map 2D{% endblock %}
+{% block content %}
+<style>
+    #filter-container {
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 16px;
+    }
+
+    #filter-container form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    #filter-container button {
+        padding: 6px 10px;
+    }
+
+    #filter-container .badge {
+        font-size: 0.75rem;
+        vertical-align: middle;
+        margin-left: 4px;
+    }
+
+    #no-results-message {
+        display: none;
+    }
+
+    /* Transparent modal backdrop */
+    .modal-backdrop.show {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Semi-transparent modal window with minimal horizontal margin */
+    #photoModal .modal-content {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 90vw;
+        margin: auto;
+    }
+
+    #photoModal .modal-body {
+        padding: 0;
+    }
+
+    /* Responsive / Mobile styles */
+    @media (max-width: 576px) {
+        #map {
+            height: 350px !important; /* Taller map on small screens */
+        }
+
+        #filter-container {
+            padding: 10px;
+            position: sticky;
+            top: 56px; /* Adjust if you have a fixed navbar */
+            z-index: 1050;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 0; /* Remove top margin since sticky */
+        }
+
+        #filter-container form {
+            gap: 8px;
+        }
+
+        #filter-container button {
+            min-width: 48px; /* Larger tap area */
+            padding: 8px 12px;
+            font-size: 1rem;
+        }
+
+        /* Filter buttons container horizontal scroll */
+        #filter-container > .d-flex.flex-wrap.gap-2 {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            justify-content: flex-start !important; /* align left for scroll */
+        }
+        #filter-container > .d-flex.flex-wrap.gap-2 > button {
+            flex: 0 0 auto; /* prevent shrinking */
+        }
+
+        /* Increase date input font size */
+        #filter-container input[type="date"] {
+            font-size: 1rem;
+            padding: 6px 8px;
+        }
+
+        .btn {
+            font-size: 1rem;
+            min-height: 38px;
+        }
+    }
+</style>
+
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3">
+                    <p class="text-dark m-0 fw-bold">Map Statistics</p>
+                </div>
+                <div class="card-body">
+                    <!-- Map -->
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+
+                    <!-- No results message -->
+                    <div id="no-results-message" class="alert alert-warning text-center mt-3">
+                        No locations found for the selected date.
+                    </div>
+
+                    <!-- Filter Section -->
+                    <div id="filter-container">
+                        <div class="d-flex flex-wrap gap-2">
+                            <button id="filter-all" type="button" onclick="filterMarkers('all')" class="btn btn-outline-dark btn-sm active" aria-pressed="true">
+                                All <span class="badge bg-secondary">{{ locations|length }}</span>
+                            </button>
+                            {% for t in types %}
+                                {% set safe_id = t|replace(' ', '_')|lower %}
+                                <button id="filter-{{ safe_id }}" type="button" onclick="filterMarkers('{{ t }}')" class="btn btn-outline-dark btn-sm" aria-pressed="false">
+                                    {{ t.capitalize() }}
+                                    <span class="badge bg-secondary">
+                                        {{ locations | selectattr("type", "equalto", t) | list | length }}
+                                    </span>
+                                </button>
+                            {% endfor %}
+                        </div>
+                        <hr>
+                        <form method="get" action="/map">
+                            <label for="start_date"><strong>Start Date</strong></label>
+                            <input type="date" id="start_date" name="start_date"
+                                   value="{{ (start_date or current_date).strftime('%Y-%m-%d') }}"
+                                   class="form-control">
+
+                            <label for="end_date"><strong>End Date</strong></label>
+                            <input type="date" id="end_date" name="end_date"
+                                   value="{{ (end_date or current_date).strftime('%Y-%m-%d') }}"
+                                   class="form-control">
+
+                            <div class="d-flex gap-2 mt-2 flex-wrap">
+                                <button type="submit" class="btn btn-dark btn-sm">Apply Filter</button>
+                                <a href="/map" class="btn btn-secondary btn-sm align-content-center">Reset Filter</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white" id="photoModalLabel">Image Preview</h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalPhoto" src="" alt="Photo" class="img-fluid" style="max-height: 80vh; width: 100%;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const locations = {{ locations | tojson | safe }}
+
+    // Layer group for markers
+    const markerLayer = L.layerGroup();
+
+    // Base layers
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+    const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '&copy; OpenTopoMap contributors'
+    });
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 17,
+        attribution: 'Tiles © Esri, NASA, NGA, USGS'
+    });
+
+    // Initialize map with default base and markers layer
+    const map = L.map('map', {
+        center: [33.049616, 35.370456],
+        zoom: 15,  // Changed zoom from 13 to 15
+        layers: [satellite, markerLayer]
+    });
+
+    // Base layers and overlays for control
+    const baseMaps = {
+        "OpenStreetMap": osm,
+        "OpenTopoMap": topo,
+        "Satellite": satellite
+    };
+
+    const overlayMaps = {
+        "Locations": markerLayer
+    };
+
+    // Add layer control to map (base layers + overlays)
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    const baseLayerMapping = {
+        all: "OpenStreetMap",
+        park: "Satellite",
+        museum: "OpenTopoMap",
+        restaurant: "OpenStreetMap"
+    };
+
+    let currentBaseLayer = osm;
+
+    function switchBaseLayer(layerName) {
+        if (!baseMaps[layerName]) return;
+        if (currentBaseLayer) {
+            map.removeLayer(currentBaseLayer);
+        }
+        currentBaseLayer = baseMaps[layerName];
+        map.addLayer(currentBaseLayer);
+    }
+
+    function updateMarkers(type = 'all') {
+        markerLayer.clearLayers();
+
+        const filtered = locations.filter(loc => type === 'all' || loc.type === type);
+        const noResultsMsg = document.getElementById('no-results-message');
+
+        if (filtered.length === 0) {
+            noResultsMsg.style.display = 'block';
+            map.setView([33.049616, 35.370456], 15);
+            return;
+        } else {
+            noResultsMsg.style.display = 'none';
+        }
+
+        const bounds = [];
+
+        filtered.forEach(loc => {
+            const icon = L.icon({
+                iconUrl: loc.icon_url || '/static/default-icon.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+            // Popup with clickable image to open modal
+           const sanitizedName = loc.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+const photoSrc = loc.photo || '/static/default-photo.png';
+
+const popup = `
+    <div style="text-align:center;">
+        <h6>${sanitizedName}</h6>
+        <img src="${photoSrc}" alt="${sanitizedName}"
+             style="width:150px; border-radius:8px; cursor:pointer;"
+             onclick="openPhotoModal('${photoSrc}', '${sanitizedName}')">
+    </div>
+`;
+
+            const marker = L.marker([loc.latitude, loc.longitude], { icon }).bindPopup(popup);
+            markerLayer.addLayer(marker);
+            bounds.push([loc.latitude, loc.longitude]);
+        });
+
+        if (bounds.length > 0) {
+            map.fitBounds(bounds, { padding: [20, 20] });
+        }
+    }
+
+    window.filterMarkers = function(type) {
+        updateMarkers(type);
+
+        const safeTypeKey = type === 'all' ? 'all' : type.replace(/\s+/g, '_').toLowerCase();
+        const baseLayerName = baseLayerMapping[safeTypeKey] || "OpenStreetMap";
+        switchBaseLayer(baseLayerName);
+
+        document.querySelectorAll('#filter-container button').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-pressed', 'false');
+        });
+        const activeBtn = document.getElementById(`filter-${safeTypeKey}`);
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.setAttribute('aria-pressed', 'true');
+        }
+    };
+
+    // Initialize markers and filters on page load
+    updateMarkers();
+
+    // Modal open function
+    window.openPhotoModal = function(photoUrl, name) {
+        const modalPhoto = document.getElementById('modalPhoto');
+        modalPhoto.src = photoUrl;
+        modalPhoto.alt = name;
+        const photoModal = new bootstrap.Modal(document.getElementById('photoModal'));
+        photoModal.show();
+    };
+});
+</script>
+
+{% endblock %}

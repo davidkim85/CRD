@@ -1,0 +1,166 @@
+{% macro distributed_column_chart(labels, values, colors, container_id='title-bar-chart') %}
+<div id="{{ container_id }}" style="width: 100%; height: 300px;"></div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+    const chartLabels = {{ labels | tojson }};
+    const chartData = {{ values | tojson }};
+    const chartColors = {{ colors | tojson }};
+
+    const options = {
+        chart: {
+            type: 'bar',
+            height: 300,
+            toolbar: { show: false },
+            animations: {
+                enabled: true,
+                easing: 'easeOutBounce',
+                speed: 900,
+                animateGradually: { enabled: true, delay: 120 },
+                dynamicAnimation: { enabled: true, speed: 400 }
+            },
+            dropShadow: {
+                enabled: true,
+                top: 3,
+                left: 3,
+                blur: 5,
+                opacity: 0.25,
+                color: '#444'
+            },
+            cursor: 'pointer',
+            events: {
+                dataPointSelection: function(event, chartContext, config) {
+                    const label = chartLabels[config.dataPointIndex];
+                    const count = chartData[config.dataPointIndex];
+                    console.log(`Selected: ${label} (${count} reports)`);
+                    // Optional: handle selection (e.g., redirect or modal)
+                    // window.location.href = `/reports/${encodeURIComponent(label)}`;
+                }
+            }
+        },
+        series: [{
+            name: 'Count',
+            data: chartData
+        }],
+        xaxis: {
+            categories: chartLabels,
+            title: { text: 'Report Titles' },
+            labels: {
+                rotate: -30,
+                formatter: function(val) {
+                    return val.length > 10 ? val.slice(0,10) + '…' : val;
+                },
+                style: {
+                    fontSize: '12px'
+                }
+            }
+        },
+        plotOptions: {
+            bar: {
+                distributed: true,
+                horizontal: false,
+                columnWidth: '55%',
+                borderRadius: 6,
+                endingShape: 'rounded',
+                colors: {
+                    backgroundBarColors: ['#eee'],
+                    backgroundBarRadius: 5
+                },
+                dataLabels: {
+                    position: 'center'  // Labels centered inside bars
+                }
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'vertical',
+                shadeIntensity: 0.9,
+                gradientToColors: chartColors,
+                inverseColors: false,
+                opacityFrom: 1,
+                opacityTo: 0.8,
+                stops: [0, 50, 100]
+            }
+        },
+        colors: chartColors,
+        dataLabels: {
+            enabled: true,
+            position: 'center',
+            style: {
+                colors: ['#fff'],
+                fontWeight: 'bold',
+                fontSize: '14px',
+                fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+            },
+            dropShadow: {
+                enabled: true,
+                top: 1,
+                left: 1,
+                blur: 4,
+                opacity: 0.85
+            }
+        },
+        tooltip: {
+            enabled: true,
+            style: {
+                fontSize: '14px'
+            },
+            theme: 'dark',
+            onDatasetHover: {
+                highlightDataSeries: true
+            },
+            y: {
+                formatter: function (val) {
+                    return val + " reports";
+                }
+            },
+            custom: function({series, seriesIndex, dataPointIndex, w}) {
+                const label = w.globals.labels[dataPointIndex];
+                return `<div style="padding:10px; background:#222; color:#fff; border-radius:5px; box-shadow: 2px 2px 6px rgba(0,0,0,0.4);">
+                            <strong>${label}</strong><br/>Reports: ${series[seriesIndex][dataPointIndex]}
+                        </div>`;
+            }
+        },
+        states: {
+            normal: {
+                filter: { type: 'none' }
+            },
+            hover: {
+                filter: { type: 'none' },
+                scale: 1.1,
+                transition: { duration: 300 },
+                dataLabels: {
+                    style: {
+                        colors: ['#ffff00']  // Yellow label color on hover
+                    }
+                }
+            },
+            active: {
+                allowMultipleDataPointsSelection: false,
+                filter: {
+                    type: 'darken',
+                    value: 0.4
+                }
+            }
+        },
+        responsive: [{
+            breakpoint: 768,
+            options: {
+                chart: { height: 250 },
+                xaxis: {
+                    labels: {
+                        show: false // ⛔ Hide X-axis labels on mobile
+                    }
+                }
+            }
+        }]
+    };
+
+    const chart = new ApexCharts(document.querySelector("#{{ container_id }}"), options);
+    chart.render();
+});
+</script>
+{% endmacro %}

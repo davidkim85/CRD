@@ -1,0 +1,264 @@
+{% set active_page = 'home' %}
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block head_extra %}
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+  <!-- FontAwesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for modal -->
+  <style>
+    .modal-content.rounded-4 {
+      border-radius: 1rem !important;
+    }
+    .modal-content.shadow-lg {
+      box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.3) !important;
+    }
+    #globalPasswordInput:focus {
+      border-color: #0d6efd !important;
+      box-shadow: 0 0 8px #0d6efd66 !important;
+    }
+    .btn-primary:hover {
+      background-color: #0b5ed7 !important;
+      box-shadow: 0 0 10px #0b5ed7aa;
+    }
+    .modal-footer .btn {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Info Cards -->
+  <div class="row">
+<div class="col-md-6 col-xl-3 mb-4">
+  <div class="card shadow border-start-primary py-2">
+    <div class="card-body">
+      <div class="row align-items-center no-gutters">
+        <div class="col me-2">
+          <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Members</span></div>
+          <div class="text-dark fw-bold h5 mb-0">
+            <span data-count="{{ count_users }}">0</span>
+          </div>
+        </div>
+        <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-xl-3 mb-4">
+  <div class="card shadow border-start-success py-2">
+    <div class="card-body">
+      <div class="row align-items-center no-gutters">
+        <div class="col me-2">
+          <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Images</span></div>
+          <div class="text-dark fw-bold h5 mb-0">
+            <span data-count="{{ count_images }}">0</span>
+          </div>
+        </div>
+        <div class="col-auto"><i class="fas fa-image fa-2x text-gray-300"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-xl-3 mb-4">
+  <div class="card shadow border-start-info py-2">
+    <div class="card-body">
+      <div class="row align-items-center no-gutters">
+        <div class="col me-2">
+          <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>All Reports</span></div>
+          <div class="text-dark fw-bold h5 mb-0">
+            <span data-count="{{ count_reports }}">0</span>
+          </div>
+        </div>
+        <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-xl-3 mb-4">
+  <div class="card shadow border-start-warning py-2">
+    <div class="card-body">
+      <div class="row align-items-center no-gutters">
+        <div class="col me-2">
+          <div class="text-uppercase text-danger fw-bold text-xs mb-1"><span>All Suspects</span></div>
+          <div class="text-dark fw-bold h5 mb-0">
+            <span data-count="{{ count_suspects }}">0</span>
+          </div>
+        </div>
+        <div class="col-auto"><i class="fas fa-user-secret fa-2x text-gray-300"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row">
+    <div class="col-lg-7 col-xl-8">
+      <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="text-dark fw-bold m-0"><i class="fas fa-chart-bar me-2 text-success"></i>Overall Category</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-area" style="height: 300px; width: 100%;">
+            {% from 'bar_macros.html' import distributed_column_chart %}
+            {{ distributed_column_chart(labels, values, colors) }}
+            <noscript><p>Please enable JavaScript to view the chart.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5 col-xl-4">
+      <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="text-dark fw-bold m-0"><i class="fas fa-chart-pie me-2 text-success"></i>Overall Reports</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-area" style="position: relative; height: 300px; width: 100%;">
+            {% from 'pie_macros.html' import pie_chart %}
+            {{ pie_chart(labels, values, colors) }}
+            <noscript><p>Please enable JavaScript to view the chart.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="text-dark fw-bold m-0"><i class="fas fa-calendar-week me-2 text-success"></i>Overall ReportsReport for last 7 days</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-area" style="position: relative; height: 300px; width: 100%;">
+            {% from 'line_macros.html' import spline_area_chart %}
+            {{ spline_area_chart(labels1, values1, titles1) }}
+            <noscript><p>Please enable JavaScript to view the chart.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Global Password Modal -->
+<div class="modal fade" id="globalPasswordModal" tabindex="-1" aria-labelledby="globalPasswordModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content shadow-lg rounded-4 border-white">
+      <form id="globalPasswordForm" novalidate>
+        <div class="modal-header bg-dark text-white rounded-top-4 d-flex align-items-center">
+          <i class="fas fa-lock fa-lg me-2"></i>
+          <h5 class="modal-title fw-bold" id="globalPasswordModalLabel">Enter Global Password</h5>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input
+              type="password"
+              class="form-control form-control-lg border-dark shadow-sm"
+              id="globalPasswordInput"
+              placeholder="Password"
+              required
+              autofocus
+              autocomplete="off"
+              aria-describedby="passwordError"
+            >
+            <div class="invalid-feedback fw-semibold" id="passwordError"></div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="submit" class="btn btn-dark btn-lg px-5 shadow-sm fw-bold" id="globalSubmitBtn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const pending = getCookie('pending_global_password');
+  if (pending === '1') {
+    const modal = new bootstrap.Modal(document.getElementById('globalPasswordModal'));
+    modal.show();
+
+    const form = document.getElementById('globalPasswordForm');
+    const input = document.getElementById('globalPasswordInput');
+    const errorDiv = document.getElementById('passwordError');
+    const submitBtn = document.getElementById('globalSubmitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorDiv.textContent = '';
+      input.classList.remove('is-invalid');
+
+      const password = input.value.trim();
+      if (!password) {
+        input.classList.add('is-invalid');
+        errorDiv.textContent = 'Password is empty';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      try {
+        const response = await fetch('/auth/check_global_password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ password }),
+        });
+
+        if (response.ok) {
+          modal.hide();
+          document.cookie = 'pending_global_password=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        } else {
+          const data = await response.json();
+          input.classList.add('is-invalid');
+          errorDiv.textContent = data.detail || 'Wrong Password';
+        }
+      } catch {
+        input.classList.add('is-invalid');
+        errorDiv.textContent = 'Server Error';
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+});
+ document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('[data-count]');
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-count');
+      let count = 0;
+      const duration = 1500;
+      const stepTime = Math.max(Math.floor(duration / target), 10);
+
+      const timer = setInterval(() => {
+        count++;
+        counter.textContent = count;
+        if (count >= target) {
+          clearInterval(timer);
+          counter.textContent = target; // Ensure exact target at end
+        }
+      }, stepTime);
+    });
+  });
+</script>
+{% endblock %}

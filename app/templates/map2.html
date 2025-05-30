@@ -1,0 +1,266 @@
+{% set active_page = 'map2' %}
+{% extends 'base.html' %}
+{% block title %}Map 3D{% endblock %}
+{% block content %}
+<style>
+  #filter-container {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 16px;
+  }
+  #filter-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  #filter-container button {
+    padding: 6px 10px;
+  }
+  .marker {
+    background-size: cover;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  #map {
+    height: 500px;
+    width: 100%;
+  }
+  .zoomable {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+  }
+  .zoomable:hover {
+    transform: scale(1.05);
+  }
+
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: opacity 0.3s ease;
+  }
+
+  .modal.fade .modal-dialog {
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .modal.fade.show .modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .modal-content {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row mb-3">
+    <div class="col-lg-12">
+      <div class="card shadow mb-3">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+          <p class="text-dark m-0 fw-bold">Map Statistics</p>
+          <button id="toggle-style" class="btn btn-outline-dark btn-sm">Switch to Satellite</button>
+        </div>
+        <div class="card-body">
+          <div id="map"></div>
+          <div id="no-results-message" class="alert alert-warning text-center mt-3" style="display:none;">
+            No locations found for the selected date.
+          </div>
+
+          <div id="filter-container">
+            <div class="d-flex flex-wrap gap-2">
+              <button id="filter-all" onclick="filterMarkers('all')" class="btn btn-outline-dark btn-sm active">
+                All <span class="badge bg-secondary">{{ locations_geojson.features | length }}</span>
+              </button>
+              {% for t in types %}
+                {% set safe_id = t|replace(' ', '_')|lower %}
+                <button id="filter-{{ safe_id }}" type="button" onclick="filterMarkers('{{ t }}')" class="btn btn-outline-dark btn-sm">
+                  {{ t.capitalize() }}
+                  <span class="badge bg-secondary">
+                    {{ locations_geojson.features | selectattr("properties.type", "equalto", t) | list | length }}
+                  </span>
+                </button>
+              {% endfor %}
+            </div>
+            <hr>
+            <form method="get" action="/map2">
+              <label for="start_date"><strong>Start Date</strong></label>
+              <input type="date" id="start_date" name="start_date"
+                     value="{{ (start_date or current_date).strftime('%Y-%m-%d') }}">
+
+              <label for="end_date"><strong>End Date</strong></label>
+              <input type="date" id="end_date" name="end_date"
+                     value="{{ (end_date or current_date).strftime('%Y-%m-%d') }}">
+
+              <div class="d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-dark btn-sm">Apply Filter</button>
+                <a href="/map2" class="btn btn-secondary btn-sm align-content-center">Reset Filter</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white" id="photoModalLabel">Image Preview</h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center p-0">
+        <img id="modalPhoto" src="" alt="Photo" class="img-fluid m-0" style="max-height: 80vh; width: 100%;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<link href="https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js"></script>
+
+<script>
+  const key = "MQPwGXKOa8W42IXMonEO";  // Your MapTiler key
+  const geojson = {{ locations_geojson | tojson }};
+  let markers = [];
+  let isStreet = true;
+
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: `https://api.maptiler.com/maps/streets/style.json?key=${key}`,
+    center: [35.422677, 33.076762],
+    zoom: 12,
+    pitch: 60,
+    bearing: -20,
+    antialias: true
+  });
+
+  function clearMarkers() {
+    markers.forEach(m => m.remove());
+    markers = [];
+  }
+
+  function addMarkers(features) {
+    clearMarkers();
+    const messageEl = document.getElementById('no-results-message');
+    if (features.length === 0) {
+      messageEl.textContent = "No markers found for the selected filter.";
+      messageEl.style.display = "block";
+      return;
+    }
+    messageEl.style.display = "none";
+    const bounds = new maplibregl.LngLatBounds();
+    features.forEach(feature => {
+      const { coordinates } = feature.geometry;
+      const { icon_url, name, photo } = feature.properties;
+      const icon = icon_url || 'https://cdn-icons-png.flaticon.com/512/252/252025.png';
+      const photos = Array.isArray(photo) ? photo : [photo || 'https://via.placeholder.com/300'];
+
+      const el = document.createElement("div");
+      el.className = "marker";
+      el.style.backgroundImage = `url('${icon}')`;
+
+      const popupContent = `
+        <strong>${name || 'No Name'}</strong><br>
+        <img src="${photos[0]}" alt="Image" style="width:100px;cursor:pointer;margin-top:5px;"
+             onclick='showImageModal(${JSON.stringify(photos)})' />
+      `;
+
+      const marker = new maplibregl.Marker(el)
+        .setLngLat(coordinates)
+        .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupContent))
+        .addTo(map);
+
+      markers.push(marker);
+      bounds.extend(coordinates);
+    });
+
+    if (features.length === 1) {
+      map.flyTo({ center: features[0].geometry.coordinates, zoom: 17 });
+    } else {
+      map.fitBounds(bounds, { padding: 40, maxZoom: 16 });
+    }
+  }
+
+  function setActiveButton(type) {
+    document.querySelectorAll("#filter-container button").forEach(btn => btn.classList.remove("active"));
+    const id = type === 'all' ? 'all' : type.toLowerCase().replace(/\s+/g, '_');
+    const btn = document.getElementById(`filter-${id}`);
+    if (btn) btn.classList.add("active");
+  }
+
+  function filterMarkers(type = 'all') {
+    setActiveButton(type);
+    const filtered = type === 'all' ? geojson.features : geojson.features.filter(f => f.properties.type === type);
+    addMarkers(filtered);
+  }
+
+  function addTerrainAndHillshade() {
+    if (!map.getSource('terrain')) {
+      map.addSource('terrain', {
+        type: 'raster-dem',
+        url: `https://api.maptiler.com/tiles/terrain-rgb/tiles.json?key=${key}`,
+        tileSize: 512,
+        maxzoom: 14
+      });
+    }
+
+    map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
+
+    if (!map.getLayer('hillshade')) {
+      map.addLayer({
+        id: 'hillshade',
+        type: 'hillshade',
+        source: 'terrain',
+        layout: {},
+        paint: {}
+      });
+    }
+  }
+
+  document.getElementById("toggle-style").addEventListener("click", () => {
+    isStreet = !isStreet;
+    map.setStyle(isStreet
+      ? `https://api.maptiler.com/maps/streets/style.json?key=${key}`
+      : `https://api.maptiler.com/maps/hybrid/style.json?key=${key}`);
+    document.getElementById("toggle-style").textContent = isStreet ? "Switch to Satellite" : "Switch to Street";
+  });
+
+  let navAdded = false;
+  map.on('style.load', () => {
+    addTerrainAndHillshade();
+    if (!navAdded) {
+      map.addControl(new maplibregl.NavigationControl());
+      navAdded = true;
+    }
+
+    const activeBtn = document.querySelector("#filter-container button.active");
+    const filterType = activeBtn && activeBtn.id !== "filter-all"
+      ? activeBtn.id.replace('filter-', '').replace(/_/g, ' ')
+      : 'all';
+    filterMarkers(filterType);
+  });
+
+  function showImageModal(images) {
+    // Use first image only for this modal
+    const src = Array.isArray(images) ? images[0] : images;
+
+    const modalImg = document.getElementById("modalPhoto");
+    modalImg.src = src;
+
+    const modal = new bootstrap.Modal(document.getElementById("photoModal"));
+    modal.show();
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% macro pie_chart(labels, values, colors) %}
+    <div id="chart_id" style="height: 400px; width: 100%;"></div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const chartLabels = {{ labels | tojson }}
+            const chartValues = {{ values | tojson }}
+            const chartColors = {{ colors | tojson }}
+
+            const options = {
+                chart: {
+                    type: 'pie',
+                    height: '100%',
+                    width: '100%',
+                    animations: {
+                        enabled: true,
+                        easing: 'easeinout',
+                        speed: 800,
+                        animateGradually: {
+                            enabled: true,
+                            delay: 150
+                        },
+                        dynamicAnimation: {
+                            enabled: true,
+                            speed: 350
+                        }
+                    },
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 2,
+                        blur: 4,
+                        opacity: 0.25
+                    }
+                },
+                series: chartValues,
+                labels: chartLabels,
+                colors: chartColors,
+                legend: {
+                    position: 'top'
+                },
+                fill: {
+                    type: 'gradient'
+                },
+                stroke: {
+                    show: true,
+                    width: 1,
+                    colors: ['#fff']
+                },
+                tooltip: {
+                    fillSeriesColor: false,
+                    theme: 'light'
+                },
+                responsive: [{
+                    breakpoint: 1200,
+                    options: {
+                        chart: {
+                            width: '80%'
+                        }
+                    }
+                }, {
+                    breakpoint: 768,
+                    options: {
+                        chart: {
+                            width: '100%'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            const chart = new ApexCharts(document.querySelector("#chart_id"), options);
+            chart.render();
+        });
+    </script>
+{% endmacro %}

@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e1cb2116-0c0d-4626-9f12-c38f77ecfa8f" name="Changes" comment="update1">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/line_macros.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/line_macros.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/reports.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/scripts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/scripts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/team.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/team.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FastAPI main" />
+        <option value="FastAPI test_main" />
+        <option value="Dockerfile" />
+        <option value="Python Script" />
+        <option value="JavaScript File" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;davidkim85&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/davidkim85/application.git&quot;,
+    &quot;accountId&quot;: &quot;6dda2da8-fed1-4a36-b64d-328ee13f1b00&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/site-packages/starlette/templating.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2vOTHYl2C2g06vr8uyugaynPLRE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;FastAPI.application.executor&quot;: &quot;Run&quot;,
+    &quot;FastAPI.application/app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jgera/Desktop/application/app/templates/{{ url_for ('static',path='&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jgera\Desktop\application\app\templates\{{ url_for ('static',path='" />
+      <recent name="C:\Users\jgera\Desktop\application\app\templates\{{ url_for('static', path='\assets" />
+      <recent name="C:\Users\jgera\Desktop\application\app\templates\static" />
+      <recent name="C:\Users\jgera\Desktop\application" />
+      <recent name="C:\Users\jgera\Desktop\application\static\auth\img" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jgera\Desktop\application\app\templates" />
+      <recent name="C:\Users\jgera\Desktop\application\app" />
+      <recent name="C:\Users\jgera\Desktop\application\app\broker" />
+      <recent name="C:\Users\jgera\Desktop\application" />
+      <recent name="C:\Users\jgera\Desktop\application\static\auth\img" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="application" type="Python.FastAPI">
+      <option name="file" value="$PROJECT_DIR$/app/main.py" />
+      <module name="application" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/AppData/Local/Programs/Python/Python312/python.exe" />
+      <option name="SDK_NAME" value="Python 3.12" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="application" type="Python.FastAPI">
+      <option name="file" value="$PROJECT_DIR$/app/main.py" />
+      <module name="application" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/AppData/Local/Programs/Python/Python312/python.exe" />
+      <option name="SDK_NAME" value="Python 3.12" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
+        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e1cb2116-0c0d-4626-9f12-c38f77ecfa8f" name="Changes" comment="" />
+      <created>1744015033861</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1744015033861</updated>
+      <workItem from="1744015074446" duration="23930000" />
+      <workItem from="1744039740826" duration="1430000" />
+      <workItem from="1744041258827" duration="3898000" />
+      <workItem from="1744096529560" duration="19004000" />
+      <workItem from="1744176635413" duration="302000" />
+      <workItem from="1744177163600" duration="64232000" />
+      <workItem from="1744450306434" duration="3000" />
+      <workItem from="1744453585710" duration="7791000" />
+      <workItem from="1744461929459" duration="7696000" />
+      <workItem from="1744610219340" duration="19000" />
+      <workItem from="1744633719261" duration="32000" />
+      <workItem from="1744633754013" duration="12624000" />
+      <workItem from="1744647684931" duration="11339000" />
+      <workItem from="1744715166022" duration="3394000" />
+      <workItem from="1744718902288" duration="6254000" />
+      <workItem from="1744725641505" duration="10539000" />
+      <workItem from="1744737371556" duration="6816000" />
+      <workItem from="1744744318473" duration="485000" />
+      <workItem from="1744745420062" duration="3693000" />
+      <workItem from="1744806438618" duration="1665000" />
+      <workItem from="1744808216378" duration="788000" />
+      <workItem from="1744809043381" duration="88000" />
+      <workItem from="1744809340912" duration="1884000" />
+      <workItem from="1744811283359" duration="2044000" />
+      <workItem from="1744813451665" duration="7301000" />
+      <workItem from="1744822028343" duration="246000" />
+      <workItem from="1744822389071" duration="1117000" />
+      <workItem from="1744823547849" duration="142000" />
+      <workItem from="1744823785521" duration="891000" />
+      <workItem from="1744824855610" duration="4731000" />
+      <workItem from="1744831465956" duration="2382000" />
+      <workItem from="1744881386781" duration="10324000" />
+      <workItem from="1744894166242" duration="1706000" />
+      <workItem from="1744896321157" duration="3374000" />
+      <workItem from="1744900791354" duration="2653000" />
+      <workItem from="1744903863616" duration="9741000" />
+      <workItem from="1744914120791" duration="3299000" />
+      <workItem from="1744917749623" duration="5965000" />
+      <workItem from="1744924044512" duration="1336000" />
+      <workItem from="1744925416819" duration="116000" />
+      <workItem from="1744925617130" duration="3111000" />
+      <workItem from="1744928844061" duration="2439000" />
+      <workItem from="1744931384433" duration="6370000" />
+      <workItem from="1744939828591" duration="2416000" />
+      <workItem from="1744942358388" duration="1850000" />
+      <workItem from="1744984219253" duration="6307000" />
+      <workItem from="1744991759448" duration="2440000" />
+      <workItem from="1744996831124" duration="1662000" />
+      <workItem from="1745000451254" duration="4718000" />
+      <workItem from="1745005710300" duration="381000" />
+      <workItem from="1745006110995" duration="628000" />
+      <workItem from="1745006842584" duration="4724000" />
+      <workItem from="1745065532345" duration="1179000" />
+      <workItem from="1745066812547" duration="456000" />
+      <workItem from="1745067352867" duration="496000" />
+      <workItem from="1745067883334" duration="19376000" />
+      <workItem from="1745087676257" duration="1746000" />
+      <workItem from="1745090726404" duration="13865000" />
+      <workItem from="1745223541557" duration="4325000" />
+      <workItem from="1745227990373" duration="27172000" />
+      <workItem from="1745569133101" duration="64000" />
+      <workItem from="1745576643841" duration="885000" />
+      <workItem from="1745577787870" duration="6902000" />
+      <workItem from="1745584999587" duration="5163000" />
+      <workItem from="1745590318790" duration="3550000" />
+      <workItem from="1745594310236" duration="2246000" />
+      <workItem from="1745596669774" duration="3680000" />
+      <workItem from="1745602279772" duration="87000" />
+      <workItem from="1745602391285" duration="767000" />
+      <workItem from="1745603324917" duration="2500000" />
+      <workItem from="1745605948956" duration="4969000" />
+      <workItem from="1745611086846" duration="6771000" />
+      <workItem from="1745650015051" duration="8235000" />
+      <workItem from="1745666385734" duration="179000" />
+      <workItem from="1745666694061" duration="882000" />
+      <workItem from="1745667620322" duration="14328000" />
+      <workItem from="1745841510159" duration="162000" />
+      <workItem from="1745843618291" duration="17421000" />
+      <workItem from="1746006336969" duration="37079000" />
+      <workItem from="1746369231961" duration="21042000" />
+      <workItem from="1746634827357" duration="383000" />
+      <workItem from="1746635335756" duration="78645000" />
+      <workItem from="1746948924446" duration="15921000" />
+      <workItem from="1747122134581" duration="20793000" />
+      <workItem from="1747168514280" duration="44000" />
+      <workItem from="1747168682438" duration="499000" />
+      <workItem from="1747169219921" duration="6177000" />
+      <workItem from="1747205112261" duration="44587000" />
+      <workItem from="1747288056740" duration="16694000" />
+    </task>
+    <task id="LOCAL‎-00001" summary="update1">
+      <option name="closed" value="true" />
+      <created>1746948973742</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL‎-00001" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1746948973742</updated>
+    </task>
+    <task id="LOCAL‎-00002" summary="update1">
+      <option name="closed" value="true" />
+      <created>1746948993821</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL‎-00002" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1746948993821</updated>
+    </task>
+    <task id="LOCAL‎-00003" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747117411260</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL‎-00003" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747117411260</updated>
+    </task>
+    <task id="LOCAL‎-00004" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747118315673</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL‎-00004" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747118315673</updated>
+    </task>
+    <task id="LOCAL‎-00005" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747124228526</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747124228526</updated>
+    </task>
+    <task id="LOCAL‎-00006" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747124273500</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL‎-00006" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747124273500</updated>
+    </task>
+    <task id="LOCAL‎-00007" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747124664186</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747124664186</updated>
+    </task>
+    <task id="LOCAL‎-00008" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747126453836</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747126453836</updated>
+    </task>
+    <task id="LOCAL‎-00009" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747127338685</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL‎-00009" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747127338685</updated>
+    </task>
+    <task id="LOCAL‎-00010" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747128144943</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL‎-00010" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747128144943</updated>
+    </task>
+    <task id="LOCAL‎-00011" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747130903207</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL‎-00011" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747130903207</updated>
+    </task>
+    <task id="LOCAL‎-00012" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747135977690</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL‎-00012" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747135977691</updated>
+    </task>
+    <task id="LOCAL‎-00013" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747137355998</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL‎-00013" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747137355998</updated>
+    </task>
+    <task id="LOCAL‎-00014" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747138293414</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL‎-00014" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747138293414</updated>
+    </task>
+    <task id="LOCAL‎-00015" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747163534403</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL‎-00015" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747163534403</updated>
+    </task>
+    <task id="LOCAL‎-00016" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747163621346</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL‎-00016" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747163621346</updated>
+    </task>
+    <task id="LOCAL‎-00017" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747174290755</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL‎-00017" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747174290755</updated>
+    </task>
+    <task id="LOCAL‎-00018" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747211319074</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL‎-00018" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747211319074</updated>
+    </task>
+    <task id="LOCAL‎-00019" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747212838927</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL‎-00019" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747212838927</updated>
+    </task>
+    <task id="LOCAL‎-00020" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747214466267</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL‎-00020" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747214466268</updated>
+    </task>
+    <task id="LOCAL‎-00021" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747214895699</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL‎-00021" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747214895699</updated>
+    </task>
+    <task id="LOCAL‎-00022" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747218121424</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL‎-00022" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747218121425</updated>
+    </task>
+    <task id="LOCAL‎-00023" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747218497691</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL‎-00023" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747218497691</updated>
+    </task>
+    <task id="LOCAL‎-00024" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747235681662</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL‎-00024" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747235681662</updated>
+    </task>
+    <task id="LOCAL‎-00025" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747235707324</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL‎-00025" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747235707324</updated>
+    </task>
+    <task id="LOCAL‎-00026" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747238671756</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL‎-00026" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747238671756</updated>
+    </task>
+    <task id="LOCAL‎-00027" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747249625313</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL‎-00027" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747249625314</updated>
+    </task>
+    <task id="LOCAL‎-00028" summary="update1">
+      <option name="closed" value="true" />
+      <created>1747249911277</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL‎-00028" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1747249911284</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="296f5c82-b759-4977-9956-80a37b42c744" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="296f5c82-b759-4977-9956-80a37b42c744">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update1" />
+    <option name="LAST_COMMIT_MESSAGE" value="update1" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/application$application.coverage" NAME="application Coverage Results" MODIFIED="1747122739133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

@@ -1,0 +1,73 @@
+ {% if user %}
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid">
+                        <button class="btn btn-link text-dark d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                                                <a class="navbar-brand d-flex align-items-center" href="/">
+  <img src="/app/uploads/logo/logo.png" alt="Brand Icon" style="width: 60px; height: 60px;">
+  <span class="fw-bold m-2">Cabera Recon Drone</span>
+</a>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow">
+
+                              <a class="nav-link bg-dark text-white" role="button" href="/generate-pdf">
+                                  <i class="fas fa-download fa-sm text-white-50"></i>
+                                  &nbsp;Daily</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">{{count_reports}}</span><i class="fas fa-poll-h fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header bg-dark border-dark">Reports</h6>
+                                        {% for report in reports[:5] %}
+                                        <div class="dropdown-item d-flex align-items-center justify-content-between">
+                                            <div class="me-3">
+                                                <div class="bg-dark icon-circle"><i class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+                                            <div>
+                                                <span class="small text-dark"> Posted: {{report.created.strftime('%H:%M %d-%m')}}</span>
+                                                <p>{{report.title}}</p>
+
+                                            </div>
+                                            <div class="dropdown-list-image"><img class="border rounded-circle img-profile" src="{{report.user.photo}}" alt="user photo">
+                                            </div>
+                                        </div>
+                                          {%endfor%}
+                                       <a class="dropdown-item text-center small text-dark" href="/reports">Show All Reports</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                        <span class="d-none d-lg-inline me-2 text-gray-600 small">{{user.lastname}} {{user.firstname}}
+                                    </span>
+                                        <img class="border rounded-circle img-profile" src="{{user.photo}}" alt="user_photo">
+                                    </a>
+
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="/profile"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </nav>
+ {%else%}
+ <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid">
+                        <button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+
+                </nav>
+
+
+ {%endif%}

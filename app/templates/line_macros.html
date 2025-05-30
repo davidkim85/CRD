@@ -1,0 +1,204 @@
+{% macro spline_area_chart(labels1, values1, titles1, title) %}
+<div id="spline-area-chart" style="width: 100%; height: 300px;"></div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        const labels = {{ labels1 | tojson }};
+        const data = {{ values1 | tojson }};
+        const titles = {{ titles1 | tojson }};
+
+        const options = {
+            chart: {
+                type: 'area',
+                height: 300,
+                zoom: { enabled: false },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: {
+                        delay: 150
+                    },
+                    dynamicAnimation: {
+                        speed: 350
+                    }
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 5,
+                    left: 3,
+                    blur: 6,
+                    opacity: 0.2
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true,
+                        selection: true,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        reset: true
+                    }
+                }
+            },
+            series: [{
+                name: "{{ title }}",
+                data: data
+            }],
+            markers: {
+                size: 5,
+                colors: ['#FF7F50'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: {
+                    size: 8
+                }
+            },
+            dataLabels: {
+                enabled: false,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                },
+                background: {
+                    enabled: true,
+                    foreColor: '#fff',
+                    borderRadius: 2,
+                    padding: 4,
+                    opacity: 0.9
+                }
+            },
+            xaxis: {
+                categories: labels,
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '12px',
+                        colors: '#555'
+                    },
+                    formatter: function(value) {
+                        // Format ISO date string to DD/MM/YYYY (Israel format)
+                        const d = new Date(value);
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    }
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#ccc'
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        colors: '#555'
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#e0e0e0',
+                strokeDashArray: 5,
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: true
+                    }
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: 'vertical',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#FFA07A'],
+                    inverseColors: false,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.15,
+                    stops: [0, 90, 100]
+                }
+            },
+            tooltip: {
+                theme: 'dark',
+                custom: function({ series, seriesIndex, dataPointIndex }) {
+                    const rawDate = labels[dataPointIndex];
+
+                    // Format ISO date to DD/MM/YYYY (Israel format)
+                    function formatIsraelDate(isoDate) {
+                        const d = new Date(isoDate);
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    }
+
+                    const date = formatIsraelDate(rawDate);
+
+                    const count = series[seriesIndex][dataPointIndex];
+                    const dayTitles = titles[dataPointIndex] || {};
+
+                    const titleHTML = Object.entries(dayTitles).map(([title, count]) => {
+                        return `<li><strong>${title}</strong>: ${count} reports</li>`;
+                    }).join('');
+
+                    return `<div style="padding: 10px; font-size: 13px;">
+                                <strong>${date}</strong><br>
+                                <strong>Quantity:</strong> ${count}<br>
+                                <strong>Reports:</strong><ul style="margin: 5px 0; padding-left: 1.2em;">${titleHTML}</ul>
+                            </div>`;
+                }
+            },
+            legend: {
+                show: true,
+                position: 'top',
+                horizontalAlign: 'center',
+                fontSize: '14px',
+                labels: {
+                    colors: '#333'
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    radius: 12
+                },
+                itemMargin: {
+                    horizontal: 10,
+                    vertical: 5
+                }
+            },
+            title: {
+                text: "{{ title }}",
+                align: 'center',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '18px',
+                    color: '#333'
+                }
+            },
+            responsive: [{
+                breakpoint: 768,
+                options: {
+                    chart: { height: 250 },
+                    xaxis: { labels: { rotate: -30 } },
+                    legend: { position: 'bottom' }
+                }
+            }]
+        };
+
+        const chart = new ApexCharts(document.querySelector("#spline-area-chart"), options);
+        chart.render();
+    });
+</script>
+{% endmacro %}

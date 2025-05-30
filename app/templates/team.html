@@ -1,0 +1,85 @@
+{% set active_page = 'team' %}
+{% extends 'base.html' %}
+{% block title %}Team{% endblock %}
+{% block content %}
+<div class="container-fluid px-2 px-md-4">
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-dark m-0 fw-bold">Team Info</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Photo</th>
+                            <th scope="col" class="text-nowrap">Full Name</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Reports</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for one_user in list_users %}
+                        {% if one_user.reports | length > 0 %}
+                        <tr>
+                            <td>
+                                <img
+                                    class="rounded-circle me-2"
+                                    src="{{ one_user.photo or url_for('static', filename='img/default-user.png') }}"
+                                    alt="user photo"
+                                    style="width: 40px; height: 40px; object-fit: cover;"
+                                >
+                            </td>
+                            <td class="text-nowrap">{{ one_user.firstname }} {{ one_user.lastname }}</td>
+                            <td>{{ one_user.role }}</td>
+                            <td class="text-truncate" style="max-width: 180px;" title="{{ one_user.email }}">{{ one_user.email }}</td>
+                            <td>{{ one_user.reports | length }}</td>
+                        </tr>
+                        {% endif %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">No users found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row align-items-center mt-3">
+                <div class="col-12 col-md-6 mb-2 mb-md-0">
+                    <p id="dataTable_info" class="dataTables_info mb-0" role="status" aria-live="polite">
+                        Showing {{ (current_page - 1) * per_page + 1 }} to
+                        {{ current_page * per_page if current_page * per_page <= total_users else total_users }}
+                        (Total: {{ total_users }})
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm justify-content-center justify-content-md-end mb-0 flex-wrap">
+                            <!-- Previous Page -->
+                            <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                                <a class="page-link" href="?page={{ current_page - 1 }}&per_page={{ per_page }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}" tabindex="-1" aria-disabled="{% if current_page == 1 %}true{% else %}false{% endif %}">Previous</a>
+                            </li>
+
+                            <!-- Page Numbers (show current ± 2 pages for responsiveness) -->
+                            {% set start_page = current_page - 2 if current_page - 2 > 0 else 1 %}
+                            {% set end_page = current_page + 2 if current_page + 2 <= total_pages else total_pages %}
+                            {% for i in range(start_page, end_page + 1) %}
+                                <li class="page-item {% if i == current_page %}active{% endif %}" aria-current="{% if i == current_page %}page{% endif %}">
+                                    <a class="page-link bg-dark {% if i == current_page %}text-white{% else %}text-light{% endif %}" href="?page={{ i }}&per_page={{ per_page }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+
+                            <!-- Next Page -->
+                            <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                                <a class="page-link" href="?page={{ current_page + 1 }}&per_page={{ per_page }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}" aria-disabled="{% if current_page == total_pages %}true{% else %}false{% endif %}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

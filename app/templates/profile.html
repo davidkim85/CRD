@@ -1,0 +1,165 @@
+{% set active_page = 'profile' %}
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header py-3">
+                    <h6 class="text-dark fw-bold m-0">
+                        <i class="bi bi-person-circle me-2"></i>Member Photo
+                    </h6>
+                </div>
+                <div class="card-body text-center shadow">
+                    {% if user.photo %}
+                    <img class="rounded-circle mb-3 mt-4" src="{{ user.photo }}" width="160" height="160" alt="User Photo">
+                    {% endif %}
+                    <div class="mb-3">
+                        <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="bi bi-upload me-1"></i>Change Photo
+                        </button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" action="/file" enctype="multipart/form-data">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="uploadModalLabel">
+                                            <i class="bi bi-file-earmark-arrow-up me-2"></i>Upload File
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="fileInput" class="form-label">
+                                                <i class="bi bi-paperclip me-1"></i>Choose file
+                                            </label>
+                                            <input class="form-control" type="file" id="fileInput" name="photo" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-dark">
+                                            <i class="bi bi-upload me-1"></i>Upload
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="bi bi-x-circle me-1"></i>Close
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-dark m-0 fw-bold">
+                                <i class="bi bi-person-badge me-2"></i>Member Details
+                            </p>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="role">
+                                            <i class="bi bi-shield-lock-fill me-1"></i><strong>Role</strong>
+                                        </label>
+                                        <input class="form-control" type="text" value="{{ user.role }}" id="role" placeholder="role" disabled name="role">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="email">
+                                            <i class="bi bi-envelope-fill me-1"></i><strong>Email</strong>
+                                        </label>
+                                        <input class="form-control" type="email" value="{{ user.email }}" id="email" placeholder="user@example.com" disabled name="email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="first_name">
+                                            <i class="bi bi-person me-1"></i><strong>First Name</strong>
+                                        </label>
+                                        <input class="form-control" type="text" value="{{ user.firstname }}" id="first_name" placeholder="John" disabled name="first_name">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="last_name">
+                                            <i class="bi bi-person me-1"></i><strong>Last Name</strong>
+                                        </label>
+                                        <input class="form-control" type="text" value="{{ user.lastname }}" id="last_name" placeholder="Doe" disabled name="last_name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-header">
+                                    <strong><i class="bi bi-bar-chart-line-fill me-1"></i>Self statistics</strong>
+                                </div>
+                                <hr>
+                                <h4 class="small fw-bold">Reports done<span class="float-end">{{ user.reports | length }}</span></h4>
+                                <span class="visually-hidden">7</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-dark m-0 fw-bold">
+                                <i class="bi bi-gear-fill me-2"></i>Member Contact Settings
+                            </p>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="/address">
+                                <div class="mb-3">
+                                    <label class="form-label" for="address">
+                                        <i class="bi bi-geo-alt-fill me-1"></i><strong>Address</strong>
+                                    </label>
+                                    <input class="form-control" type="text" id="address" placeholder="Street 18/23" value="{{ user.address.street }}" maxlength="50" minlength="6" required name="street">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="city">
+                                                <i class="bi bi-building me-1"></i><strong>City</strong>
+                                            </label>
+                                            <input class="form-control" type="text" id="city" placeholder="City" value="{{ user.address.city }}" required maxlength="30" minlength="4" name="city">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="country">
+                                                <i class="bi bi-globe2 me-1"></i><strong>Country</strong>
+                                            </label>
+                                            <input class="form-control" type="text" id="country" placeholder="Israel" value="{{ user.address.country }}" maxlength="30" minlength="3" required name="country">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-dark btn-sm" type="submit">
+                                        <i class="bi bi-save2 me-1"></i>Save&nbsp;Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
