@@ -1,245 +1,170 @@
-{% set active_page = 'reports' %}
 {% extends 'base.html' %}
-{% block title %}All Reports{% endblock %}
 {% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">All Reports</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for item in reports %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-truncate" title="{{ item.title }}">{{ item.title }}</h5>
+                    <p class="card-text small text-muted mb-1">Created: {{ item.created_at.strftime("%Y-%m-%d") }}</p>
+                    <p class="card-text text-truncate" title="{{ item.message }}">{{ item.message }}</p>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal{{ item.id }}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ item.id }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Modal -->
+        <div class="modal fade" id="viewModal{{ item.id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ item.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewModalLabel{{ item.id }}">{{ item.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Created At:</strong> {{ item.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                        <p><strong>Message:</strong> {{ item.message }}</p>
+                        <div class="row g-2">
+                            {% for image in item.images %}
+                            <div class="col-6 col-md-4">
+                                <img src="{{ image.url }}" class="img-fluid rounded zoomable-img" alt="Image of {{ item.title }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ item.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <form method="post" action="/reports/{{ item.id }}/edit" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel{{ item.id }}">Edit Report</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="title{{ item.id }}" class="form-label">Title</label>
+                                <input type="text" class="form-control" name="title" value="{{ item.title }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message{{ item.id }}" class="form-label">Message</label>
+                                <textarea class="form-control" name="message" rows="3" required>{{ item.message }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="images{{ item.id }}" class="form-label">Add Images</label>
+                                <input class="form-control" type="file" name="images" multiple>
+                            </div>
+                            {% if item.images %}
+                            <div class="mb-3">
+                                <label class="form-label">Existing Images</label>
+                                <div class="row g-2">
+                                    {% for image in item.images %}
+                                    <div class="col-6 col-md-4">
+                                        <img src="{{ image.url }}" class="img-fluid rounded zoomable-img" alt="Image of {{ item.title }}">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="/reports/{{ item.id }}/delete">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Delete Report</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the report titled "<strong>{{ item.title }}</strong>"?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center flex-wrap">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page - 1 }}">&laquo; Previous</a>
+            </li>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+            <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+            {% elif p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+            {% elif p == page - 3 or p == page + 3 %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page + 1 }}">Next &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
 <style>
-    .modal-body {
-  text-align: center;
-  overflow: auto;
-  padding: 0;
+.zoomable-img {
+    transition: transform 0.3s ease-in-out;
+    cursor: zoom-in;
 }
-
-.modal-body img {
-  max-width: 100%;
-  max-height: 80vh; /* Limits height to 80% of viewport height */
-  height: auto;
-  width: auto;
-  margin: 0 auto;
-  cursor: zoom-in;
-  transition: transform 0.3s ease;
+.zoomable-img.zoomed {
+    transform: scale(2);
+    cursor: zoom-out;
+    z-index: 1000;
 }
-
-.modal-body img.zoomed {
-  cursor: zoom-out;
-  transform: scale(2);
-  max-width: none;
-  max-height: none;
-  /* Optional: add shadow or z-index if needed */
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  position: relative;
-  z-index: 1060;
-}
-    .modal-content {
-        background-color: rgba(255, 255, 255, 0.7) !important;
-        backdrop-filter: blur(6px);
-        border-radius: 1rem;
-        transition: all 0.3s ease-in-out;
-    }
-    .modal-backdrop.show {
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-    .zoomable-img {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: zoom-in;
-    }
-    .zoomable-img.zoomed {
-        transform: scale(2);
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        cursor: zoom-out;
-        z-index: 1060;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.05);
-        transition: background-color 0.2s ease-in-out;
-    }
-    .zoomable:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .pagination .page-link {
-        transition: background-color 0.3s, color 0.3s;
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-        color: #fff;
-    }
 </style>
 
-<div class="container-fluid">
-    <div class="card shadow">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <p class="text-dark m-0 fw-bold">Reports</p>
-            <form method="get" class="d-flex justify-content-end">
-                <input type="text" name="search" class="form-control me-2 w-50"  minlength="2" placeholder="Search..." value="{{ search }}">
-                <input type="hidden" name="sort_by" value="{{ sort_by }}">
-                <input type="hidden" name="sort_order" value="{{ sort_order }}">
-                <input type="hidden" name="per_page" value="{{ per_page or 10 }}">
-                <button class="btn btn-dark" type="submit">Search</button>
-            </form>
-        </div>
-
-        <div class="card-body">
-            <div class="table-responsive table mt-2" role="grid">
-                <table class="table my-0 table-hover text-center">
-                    <thead>
-                        <tr>
-                            <th><i class="bi bi-pin-map" title="Icon" data-bs-toggle="tooltip"></i></th>
-                            <th><i class="bi bi-image" title="Image" data-bs-toggle="tooltip"></i></th>
-                            <th>
-                                <a href="?search={{ search }}&sort_by=title&sort_order={{ 'asc' if sort_order == 'desc' else 'desc' }}" title="Sort by title" data-bs-toggle="tooltip">
-                                    <i class="bi bi-chat-left-text"></i>
-                                </a>
-                            </th>
-                            <th><i class="bi bi-map" title="Coordinates" data-bs-toggle="tooltip"></i></th>
-                            <th>
-                                <a href="?search={{ search }}&sort_by=created&sort_order={{ 'asc' if sort_order == 'desc' else 'desc' }}" title="Sort by date" data-bs-toggle="tooltip">
-                                    <i class="bi bi-clock"></i>
-                                </a>
-                            </th>
-                            <th><i class="bi bi-person" title="Reporter" data-bs-toggle="tooltip"></i></th>
-                            <th><i class="bi bi-person-bounding-box" title="Profile Image" data-bs-toggle="tooltip"></i></th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in reports %}
-                        <tr>
-                            <td><img class="rounded-circle" width="30" height="30" loading="lazy" src="{{ item.icon }}" alt="Report icon"></td>
-                            <td>
-                                {% if item.images and item.images[0].url %}
-                                <a href="#imageModal{{ loop.index0 }}" data-bs-toggle="modal">
-                                    <img class="zoomable" width="30" height="30" loading="lazy" src="{{ item.images[0].url }}" alt="Thumbnail">
-                                </a>
-                                {% else %} N/A {% endif %}
-                            </td>
-                            <td>{{ item.title | e }}</td>
-                            <td class="text-nowrap">{{ item.latitude }}, {{ item.longitude }}</td>
-                            <td class="text-nowrap">{{ item.created.strftime('%H:%M %d/%m') }}</td>
-                            <td class="text-nowrap">
-                                {% if item.user %}
-                                <small>{{ item.user.firstname | e }} {{ item.user.lastname | e }}</small>
-                                {% else %}<small>Unknown</small>{% endif %}
-                            </td>
-                            <td>
-                                {% if item.user and item.user.photo %}
-                                <img class="rounded-circle" width="30" height="30" loading="lazy" src="{{ item.user.photo }}" alt="User photo">
-                                {% else %} N/A {% endif %}
-                            </td>
-                            <td class="text-nowrap">
-                                <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="row">
-                <div class="col align-self-start">
-                    <p class="dataTables_info" role="status" aria-live="polite">
-                        Showing page {{ page }} of {{ pages }} (Total: {{ total }})
-                    </p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <nav>
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
-                                <a class="page-link" href="?page={{ current_page - 1 }}&per_page={{ per_page or 10 }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}">Previous</a>
-                            </li>
-                            {% for i in range(1, total_pages + 1) %}
-                                {% if i == 1 or i == total_pages or (i >= current_page - 1 and i <= current_page + 1) %}
-                                <li class="page-item {% if i == current_page %}active{% endif %}">
-                                    <a class="page-link bg-dark border-dark" href="?page={{ i }}&per_page={{ per_page or 10 }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}">{{ i }}</a>
-                                </li>
-                                {% elif i == current_page - 2 or i == current_page + 2 %}
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                                {% endif %}
-                            {% endfor %}
-                            <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
-                                <a class="page-link" href="?page={{ current_page + 1 }}&per_page={{ per_page or 10 }}&search={{ search }}&sort_by={{ sort_by }}&sort_order={{ sort_order }}">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modals -->
-{% for item in reports %}
-<!-- Image Modal -->
-<div class="modal fade" id="imageModal{{ loop.index0 }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-dark">
-                <h5 class="modal-title text-white">{{ item.title | e }} - Images</h5>
-                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="imageCarousel{{ loop.index0 }}" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for image in item.images %}
-                        <div class="carousel-item {% if loop.first %}active{% endif %}">
-                            <img src="{{ image.url }}" class="d-block w-100 zoomable-img" alt="Image" loading="lazy">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% if item.images|length > 1 %}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel{{ loop.index0 }}" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel{{ loop.index0 }}" data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Confirm Deletion</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to permanently delete the report titled <strong>{{ item.title }}</strong>?
-            </div>
-            <div class="modal-footer">
-                <form method="post" action="/reports/{{ item.id }}/delete">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-{% endfor %}
-
 <script>
-document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('shown.bs.modal', () => {
-        modal.querySelectorAll('.zoomable-img').forEach(img => {
-            const clone = img.cloneNode(true);
-            img.replaceWith(clone);
-            clone.addEventListener('click', () => {
-                clone.classList.toggle('zoomed');
-            });
-        });
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('click', function (e) {
+        if (e.target.classList.contains('zoomable-img')) {
+            e.target.classList.toggle('zoomed');
+        }
     });
 });
-const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
 </script>
 {% endblock %}
