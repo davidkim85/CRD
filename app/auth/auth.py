@@ -272,15 +272,8 @@ async def google_callback(
     access_token = create_access_token({"sub": user.email})
     refresh_token = create_refresh_token({"sub": user.email})
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-    response.set_cookie(
-        "refresh_token",
-        refresh_token,
-        httponly=True,
-        max_age=7 * 24 * 60 * 60,
-        secure=True,
-        samesite="Strict"
-    )
-    response.set_cookie("pending_global_password", "1", path="/", httponly=False,secure=True, samesite="Strict")
+    response.set_cookie("refresh_token",refresh_token,httponly=True,max_age=7 * 24 * 60 * 60,secure=True)
+    response.set_cookie("pending_global_password", "1", path="/", httponly=False,secure=True)
     # Consider adding this token to the frontend via query string or JS-accessible cookie
     response.headers["Authorization"] = f"Bearer {access_token}"
     return response
