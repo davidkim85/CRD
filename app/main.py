@@ -689,7 +689,7 @@ async def generate_pdf(user: User = Depends(get_current_user),session: AsyncSess
         content=buffer.read(),
         media_type="application/pdf",
         headers={
-            "Content-Disposition": "inline; filename=last_24h_reports.pdf",
+            "Content-Disposition": "attachment; filename=last_24h_reports.pdf",
             "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
             "Pragma": "no-cache",
             "Expires": "0",
