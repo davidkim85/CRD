@@ -40,7 +40,8 @@ def create_message(recipients: List[str], subject: str, body: str):
         subject=subject,
         recipients=recipients,  # List of email addresses
         body=body,
-        subtype="html"
+        subtype="html",
+        headers={"List-Unsubscribe": "<mailto:unsubscribe@example.com>"}
     )
     return message
 

@@ -5,20 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1cb2116-0c0d-4626-9f12-c38f77ecfa8f" name="Changes" comment="update1">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/configurations/email_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/configurations/email_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/line_macros.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/line_macros.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/map.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/navigation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/reports.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/scripts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/scripts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/team.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/team.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +43,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/davidkim85/application.git&quot;,
-    &quot;accountId&quot;: &quot;6dda2da8-fed1-4a36-b64d-328ee13f1b00&quot;
+    &quot;url&quot;: &quot;https://github.com/davidkim85/CRD.git&quot;,
+    &quot;accountId&quot;: &quot;78249104-89ac-49ec-9b31-5bfbb5e34d11&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -75,7 +70,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/jgera/Desktop/application/app/templates/{{ url_for ('static',path='&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/poram/Downloads/application-master/application&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -114,7 +109,6 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$USER_HOME$/AppData/Local/Programs/Python/Python312/python.exe" />
-      <option name="SDK_NAME" value="Python 3.12" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -265,6 +259,8 @@
       <workItem from="1747169219921" duration="6177000" />
       <workItem from="1747205112261" duration="44587000" />
       <workItem from="1747288056740" duration="16694000" />
+      <workItem from="1750580494513" duration="228000" />
+      <workItem from="1750580873045" duration="5054000" />
     </task>
     <task id="LOCAL‎-00001" summary="update1">
       <option name="closed" value="true" />
@@ -498,6 +494,7 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="OPEN_GENERIC_TABS">
