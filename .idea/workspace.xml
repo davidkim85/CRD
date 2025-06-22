@@ -7,13 +7,6 @@
     <list default="true" id="e1cb2116-0c0d-4626-9f12-c38f77ecfa8f" name="Changes" comment="update1">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/configurations/email_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/configurations/email_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/reports.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nginx/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/nginx.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +253,7 @@
       <workItem from="1747205112261" duration="44587000" />
       <workItem from="1747288056740" duration="16694000" />
       <workItem from="1750580494513" duration="228000" />
-      <workItem from="1750580873045" duration="5054000" />
+      <workItem from="1750580873045" duration="6055000" />
     </task>
     <task id="LOCAL‎-00001" summary="update1">
       <option name="closed" value="true" />
@@ -486,7 +479,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1747249911284</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL‎-00029" summary="update1">
+      <option name="closed" value="true" />
+      <created>1750593386068</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL‎-00029" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1750593386068</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
